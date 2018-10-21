@@ -1,0 +1,22 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/Users/seadream/CLionProjects/APInTheUnixE/main.c
+errno.h
+-
+stdlib.h
+-
+stdio.h
+-
+fcntl.h
+-
+string.h
+-
+zconf.h
+-
+
