@@ -123,6 +123,33 @@ APInTheUnixE/fast:
 	$(MAKE) -f CMakeFiles/APInTheUnixE.dir/build.make CMakeFiles/APInTheUnixE.dir/build
 .PHONY : APInTheUnixE/fast
 
+check_fd.o: check_fd.c.o
+
+.PHONY : check_fd.o
+
+# target to build an object file
+check_fd.c.o:
+	$(MAKE) -f CMakeFiles/APInTheUnixE.dir/build.make CMakeFiles/APInTheUnixE.dir/check_fd.c.o
+.PHONY : check_fd.c.o
+
+check_fd.i: check_fd.c.i
+
+.PHONY : check_fd.i
+
+# target to preprocess a source file
+check_fd.c.i:
+	$(MAKE) -f CMakeFiles/APInTheUnixE.dir/build.make CMakeFiles/APInTheUnixE.dir/check_fd.c.i
+.PHONY : check_fd.c.i
+
+check_fd.s: check_fd.c.s
+
+.PHONY : check_fd.s
+
+# target to generate assembly for a file
+check_fd.c.s:
+	$(MAKE) -f CMakeFiles/APInTheUnixE.dir/build.make CMakeFiles/APInTheUnixE.dir/check_fd.c.s
+.PHONY : check_fd.c.s
+
 main.o: main.c.o
 
 .PHONY : main.o
@@ -159,6 +186,9 @@ help:
 	@echo "... rebuild_cache"
 	@echo "... edit_cache"
 	@echo "... APInTheUnixE"
+	@echo "... check_fd.o"
+	@echo "... check_fd.i"
+	@echo "... check_fd.s"
 	@echo "... main.o"
 	@echo "... main.i"
 	@echo "... main.s"
