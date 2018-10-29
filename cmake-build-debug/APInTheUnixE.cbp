@@ -85,10 +85,10 @@
 		<Unit filename="/Users/seadream/CLionProjects/APInTheUnixE/apue">
 			<Option target="APInTheUnixE"/>
 		</Unit>
-		<Unit filename="/Users/seadream/CLionProjects/APInTheUnixE/check_fd.c">
+		<Unit filename="/Users/seadream/CLionProjects/APInTheUnixE/main.c">
 			<Option target="APInTheUnixE"/>
 		</Unit>
-		<Unit filename="/Users/seadream/CLionProjects/APInTheUnixE/main.c">
+		<Unit filename="/Users/seadream/CLionProjects/APInTheUnixE/src">
 			<Option target="APInTheUnixE"/>
 		</Unit>
 		<Unit filename="/Users/seadream/CLionProjects/APInTheUnixE/CMakeLists.txt">

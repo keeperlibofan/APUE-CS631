@@ -1,16 +1,13 @@
-#include <zconf.h>
-#include <fcntl.h>
-#include "apue/apue.h"
+#include <grp.h>
+#include <unistd.h>
+#include <netdb.h>
+#include <sys/utsname.h>
+#include <time.h>
 
-int main(int argc, char* argv[]) {
-    if (argc != 2) {
-        err_quit("usage: a.out <pathname>");
-    }
-    if (access(argv[1], R_OK) < 0) {
 
-    }
-    AT_SYMLINK_NOFOLLOW;
-    S_ISUID;
-    _POSIX_CHOWN_RESTRICTED;
-
+int main() {
+    time();
+    CLOCK_REALTIME;
+    clock_gettime();
+    clock_getres()
 }

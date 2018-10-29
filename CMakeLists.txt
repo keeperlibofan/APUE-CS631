@@ -3,4 +3,4 @@ project(APInTheUnixE)
 
 set(CMAKE_CXX_STANDARD 11)
 
-add_executable(APInTheUnixE main.c apue check_fd.c)
+add_executable(APInTheUnixE main.c apue src)

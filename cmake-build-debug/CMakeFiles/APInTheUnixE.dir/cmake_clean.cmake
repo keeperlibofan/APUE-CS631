@@ -1,6 +1,5 @@
 file(REMOVE_RECURSE
   "CMakeFiles/APInTheUnixE.dir/main.c.o"
-  "CMakeFiles/APInTheUnixE.dir/check_fd.c.o"
   "APInTheUnixE.pdb"
   "APInTheUnixE"
 )
