@@ -17,7 +17,7 @@ int main() {
         err_sys("can't register my_exit1");
     }
     printf("main is done\n");
-    return (0); // 没有用exit语句，但是效果和exit一样
+    return (0);
 }
 
 static void

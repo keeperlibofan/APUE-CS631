@@ -39,6 +39,10 @@ stdarg.h
 -
 
 /Users/seadream/CLionProjects/APInTheUnixE/main.c
+stdio.h
+-
+stdlib.h
+-
 apue/apue.h
 /Users/seadream/CLionProjects/APInTheUnixE/apue/apue.h
 
