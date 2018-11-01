@@ -6,11 +6,39 @@
 
 #IncludeRegexTransform: 
 
-/Users/seadream/CLionProjects/APInTheUnixE/main.c
-printf.h
+/Users/seadream/CLionProjects/APInTheUnixE/apue/apue.h
+sys/types.h
+-
+sys/stat.h
+-
+sys/termios.h
+-
+sys/ioctl.h
+-
+stdio.h
 -
 stdlib.h
 -
-zconf.h
+stddef.h
 -
+string.h
+-
+unistd.h
+-
+signal.h
+-
+error.c
+/Users/seadream/CLionProjects/APInTheUnixE/apue/error.c
+
+/Users/seadream/CLionProjects/APInTheUnixE/apue/error.c
+apue.h
+/Users/seadream/CLionProjects/APInTheUnixE/apue/apue.h
+errno.h
+-
+stdarg.h
+-
+
+/Users/seadream/CLionProjects/APInTheUnixE/main.c
+apue/apue.h
+/Users/seadream/CLionProjects/APInTheUnixE/apue/apue.h
 
