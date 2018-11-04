@@ -437,16 +437,23 @@ ID修改为1(init进程的ID)。保证了每个进程都有父进程。
 init收养进程。
 
 ### wait 和 waitpid
+
+wait函数如果执行成功则返回子进程识别码(PID), 如果有错误发生则返回-1. 失败原因存于errno 中。
+
 waitpid参数做出以下解释
 + `pid==-1`, 等待任意一个子进程
 + `pid>0`,等待指定的子进程
 + `pid==0`,等待组id等于调用进程
 + `pid<-1`,等待组id等于pid绝对值得子进程
 
-wait出错的唯一原因就是调用的进程没有子进程。waitpid，出错的情况就是当指定的进程或进程组不存在。
+wait出错的唯一原因就是调用的进程没有子进程。
 
+waitpid出错的情况
++ 就是当指定的进程或进程组不存在
++ 或者被某个信号中断了，这个时候errno的值被设置为`EINTR`
+waitpid第三个参数
 + waitpid提供了一个wait的非阻塞版本，有时需要获得一个子进程的状态，但是不想阻塞
-+ waitpid还能通过WUNTRACED（pid参数指定的一个子进程处于停止状态，而且这个状态还没有被报告过，就会返回其状态）和WCONTINUED（pid参数指定的进程停止后继续运行，就会返回状态）选项支持作业控制
++ waitpid还能通过`WUNTRACED`(wait的第三个参数)（pid参数指定的一个子进程处于停止状态，而且这个状态还没有被报告过，就会返回其状态）和`WCONTINUED`（pid参数指定的进程停止后继续运行，就会返回状态）选项支持作业控制
 
 WNOHANG: 指定waitpid不阻塞，返回值是0
 
@@ -474,3 +481,179 @@ while (getppid() != 1) {
 程序，而且新的程序从其main函数开始执行。exec不创建新的进程，pid不变，但是当前进程的正文段，
 数据段，堆段和栈段都被替换了。
 
+exec 前后实际用户id和实际组id是保持不变的，而有效id是否改变取决于程序文件的设置用户id位和设置组id位
+是否被设置。如果设置用户id位被设置了，那么进程的有效用户id位变成文件所有者的id，否则不变，组id也一样。
+
+在执行shell将执行启动配置文件(start-up file)命令，而非登录shell则不会执行这些命令。
+
+##### extern
+关键字可以在一个文件中引用另一个文件中定义的变量或者函数。
+
+echoall函数
+```cpp
+#include "apue/apue.h"
+
+int main(int argc, char *argv[]) {
+    int         i;
+    char        **ptr;
+    extern char **environ; // 这样这个变量可以引用 exec 函数传给他的environ函数
+
+    for (i = 0; i < argc; i++) {
+        printf("argv[%d]: %s\n", i, argv[i]);
+    }
+
+    for (ptr = environ; *ptr != 0/*解引出来的是一个字符串指针，如果它指向0地址*/; ptr++) {
+        printf("%s\n", *ptr);
+    }
+    exit(0);
+}
+```
+
+exec调用者两种方式
+```cpp
+execle("/home/sar/bin/echoall", "echoall", "myarg1", (char*)0, env_init) // 自定义环境变量
+
+execlp("echoall", "echoall", "olny 1 arg", (char*)0) // 使用shell传给它的环境变量
+```
+
+#### 更改用户ID和更改组ID
+
+最小特权模型：我们的程序应当只具有完成给定任务的最小权限。
+
+setuid的规则
+
++ 如果进程有超级用户权限，则setuid将实际用户id，euid，saved set-user-id 都设置为 uid，这就意味着该进程将自己的权限降低了
++ 如果没有超级用户权限，但是uid等于实际用户ID或者保存的设置用户id，则setuid系统调用只将进程的euid改为uid
++ 如果都不满足，errno被设置为EPERM，返回-1
+
+一下几点
+
++ 只有超级用户进程才能够修改实际用户的id。通常，实际用户的id实在用户登录的时候，由login(1)程序设置的，而且不会改变他，所以login是一个
+超级用户进程，调用setuid的时候，设置3种用户id。
++ 当程序文件设置了设置用户id位的时候，exec才能设置有效用户id，如果没有，exec不会改变其有效id。任何时候都可以调用setuid函数将有效uid设置为
+euid和ruid。
++ saved set-uid 是由exec复制euid得到的。如果文件设置了set-uid 位，exec根据文件的uid设置euid以后，这个副本就被保护了起来。
+
+所以之所有进程要有saved set-uid 位，是因为进程会有通过`setuid函数`在两种uid（ruid和进程当前使用的文件的所有者id）进行切换的需要。
+
+```cpp
+exec("login") // 设置为程序文件的uid，saved set-uid 副本拷贝
+```
+
+setuid 只能降低或者保持权限，而exec要根据文件进行升高权限(但不更改ruid)，而且退出后权限位会复原。
+
+进程的saved set-uid位永远都是从进程的euid中获取的，它就是euid的副本。
+
+函数 getuid和geteuid只能获取ruid和euid，没有可移植的方法获取saved set-uid的值。
+
+##### 函数setreuid和setregid
+
+功能是交换实际用户id和有效用户id的值。(不知道为什么要说成交换)
+
++ 如果参数设置为-1，保持不变
+
+程序在子进程调用exec之前，将子进程的ruid,euid都设置成为普通用户id。
+
+##### 组id
+
+附属组id不受setgid，setregid和setegid函数的影响
+
+at 命令
+
+at命令用于指定将来某个时刻运行程序，由它启动的程序同样作为守护进程
+
+mac os上安装at程序的设置用户id是root用户，这容许at命令对守护进程拥有特权文件的写权限，守护
+进程代表用户运行at命令。
+
++ 程序文件是由root用户拥有的，设置用户id位已经设置。如果运行程序时，euid和saved set-uid被设置
++ at程序第一个要做的事情就是降低权限，防止对特权的误用。
++ 直到它需要访问控制哪些命令即将运行，这些命令要何时运行的配置文件时
+
+
+调用execl时，内核取execl调用中的pathname而非第一个参数testinterp，因为一眼而言，pathname有更多信息。
+
+脚本中也可以添加`-f`选项
+使用的方式就是
+```cpp
+#!/bin/awk -f
+```
+
+suspend 可以挂起超级用户的shell
+
+##### awk命令
+
+awk命令是文本处理命令，是一种强大的文本分析工具，命名是取自三位创始人的名字。
+
+awk读解释器文件的时候，因为#是awk的注释字段，所以它会忽略掉第一行，不能期望解释器会使用
+
+下面是一个awk的example，shell脚本文件，我们将它命名为awkexample
+```
+#!/usr/bin/awk -f
+
+BEGIN {
+    for (i = 0; i < ARGC; i++)
+        print "ARGV[%d] = %s\n", i, ARGV[i]
+    exit
+}
+```
+解释器文件可以使用户的效率得到提高，但是其代价就是额外的内核开销(因为识别解释器文件的是内核)。
++ 为了执行上面的脚本程序，只需要使用下列命令行，awkexample \<args\>，而不需要`awk -f awkexample <args>`,
++ shell脚本在效率上提供了一些好处
+
+当把
+```bash
+awk ` BEGIN {
+    for (i = 0; i < ARGC; i++) 
+        print "ARGV[%d] = %s\n", i, ARGV[i]
+    exit
+}` $*
+```
+
+如何执行这个脚本，shell读取了此命令，然后调用execlp此文件名，发现这并不是一个机器可执行的文件，所以就返回字一个错误，然后execlp就自动认为这是一个
+shell脚本。然后就执行`/bin/sh`来解释这个脚本，shell正确的运行了我们的脚本，但是为了运行awk程序，它还是调用了fork，exec和wait函数。于是，用一个shell脚本代替
+解释器解释器脚本需要更多的开销。
+
+shell脚本和解释器脚本的区别就在是否以一个解释器名称开头，而且shell脚本文件名都都必须以`.sh`结尾。
+
++ 解释器脚本使我们可以使用除了/bin/sh以外的其他shell来编写shell脚本。当execlp执行到一个非机器可执行的可执行文件的时候，它总是会调用/bin/sh来解释执行该文件。但是用解释器脚本
+则可以简单的写出
+
+```
+#!/bin/csh
+```
+
+#### 函数 system
+
+只有当命令处理程序可用的时候，才回返回0。system函数的实现也是调用了fork，exec和waitpid这三个函数，因此会有三个返回值
+
++ fork失败或者waitpid返回失败除开了EINTR之外的错误，则system函数会返回一个-1，而且设置了errno以指示错误类型。
++ 如果exec失败（system是总是调用/bin/sh来解释传递进入的字符串命令参数）。
++ 如果3个函数都成功，那么，system返回值就是shell子进程的终止状态，返回格式是waitpid的格式。
+
+system进行了所需的各种错误处理以及信号处理。在UNIX早期系统中，都没有waitpid函数，可以用下面语句来替代
+```cpp
+while ((lastpid = wait(&status)) != pid && lastpid != -1);
+```
+
+system就是进行了fork和exec，然而如果进程以一种特殊权限运行，它又想生成一个进程执行另外一个程序，我们不能继续给予这个
+子进程特权，然而system没有在fork和exec之间对权限进行修改。set-uid 和set-gid绝对不应该调用system函数。
+
+#### 进程会计
+
+每当进程结束的时候，内核就会写一个会计记录
+
+#### 进程调度
+
+内核决定调度，进程可以通过调整nice的值选择以更低优先级运行，通过调整nice值来降低对CPU的占有
+所以该进程是"友好的"。NZERO是系统默认的nice值
+
+nice函数
+用与增加nice值，越nice的进程越不会占用太多的CPU时间。
+
+getpriotirty函数，可以获取相应进程的nice值
+
+setpriority可以设置相应进程的nice值
+
+#### 进程时间
+
+times函数，times函数返回墙上进程时间作为其函数值。此值是相对于过去的某一时刻度量的。

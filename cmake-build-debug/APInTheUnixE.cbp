@@ -85,6 +85,9 @@
 		<Unit filename="/Users/seadream/CLionProjects/APInTheUnixE/apue">
 			<Option target="APInTheUnixE"/>
 		</Unit>
+		<Unit filename="/Users/seadream/CLionProjects/APInTheUnixE/echoall.c">
+			<Option target="APInTheUnixE"/>
+		</Unit>
 		<Unit filename="/Users/seadream/CLionProjects/APInTheUnixE/main.c">
 			<Option target="APInTheUnixE"/>
 		</Unit>

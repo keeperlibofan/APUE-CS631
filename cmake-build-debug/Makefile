@@ -123,6 +123,33 @@ APInTheUnixE/fast:
 	$(MAKE) -f CMakeFiles/APInTheUnixE.dir/build.make CMakeFiles/APInTheUnixE.dir/build
 .PHONY : APInTheUnixE/fast
 
+echoall.o: echoall.c.o
+
+.PHONY : echoall.o
+
+# target to build an object file
+echoall.c.o:
+	$(MAKE) -f CMakeFiles/APInTheUnixE.dir/build.make CMakeFiles/APInTheUnixE.dir/echoall.c.o
+.PHONY : echoall.c.o
+
+echoall.i: echoall.c.i
+
+.PHONY : echoall.i
+
+# target to preprocess a source file
+echoall.c.i:
+	$(MAKE) -f CMakeFiles/APInTheUnixE.dir/build.make CMakeFiles/APInTheUnixE.dir/echoall.c.i
+.PHONY : echoall.c.i
+
+echoall.s: echoall.c.s
+
+.PHONY : echoall.s
+
+# target to generate assembly for a file
+echoall.c.s:
+	$(MAKE) -f CMakeFiles/APInTheUnixE.dir/build.make CMakeFiles/APInTheUnixE.dir/echoall.c.s
+.PHONY : echoall.c.s
+
 main.o: main.c.o
 
 .PHONY : main.o
@@ -159,6 +186,9 @@ help:
 	@echo "... rebuild_cache"
 	@echo "... edit_cache"
 	@echo "... APInTheUnixE"
+	@echo "... echoall.o"
+	@echo "... echoall.i"
+	@echo "... echoall.s"
 	@echo "... main.o"
 	@echo "... main.i"
 	@echo "... main.s"

@@ -1,32 +1,13 @@
-#include "apue/apue.h"
+#include <limits.h>
+#include <zconf.h>
+#include <stdlib.h>
+#include <event.h>
 
-static void charatatime(char *);
+static void pr_times(clock_t, struct tms*, struct tms*);
 
-int
-main(void) {
-    pid_t pid;
+int main() {
 
-    TELL_WAIT();
-
-    if (((pid = fork()) <  0)) {
-        err_sys("fork error");
-    } else if (pid == 0) { // child
-        WAIT_PARENT();
-        charatatime("output from child\n");
-    } else {
-        charatatime("output from parent\n");
-        TELL_CHILD(pid);
-    }
-    exit(0);
 }
 
-static void
-charatatime(char * str) {
-    char *ptr;
-    int c;
 
-    setbuf(stdout, NULL);
-    for (ptr = str; (c = *ptr++) != 0; ) {
-        putc(c, stdout);
-    }
-}
+

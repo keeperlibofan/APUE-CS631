@@ -4,6 +4,7 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_C
+  "/Users/seadream/CLionProjects/APInTheUnixE/echoall.c" "/Users/seadream/CLionProjects/APInTheUnixE/cmake-build-debug/CMakeFiles/APInTheUnixE.dir/echoall.c.o"
   "/Users/seadream/CLionProjects/APInTheUnixE/main.c" "/Users/seadream/CLionProjects/APInTheUnixE/cmake-build-debug/CMakeFiles/APInTheUnixE.dir/main.c.o"
   )
 set(CMAKE_C_COMPILER_ID "AppleClang")

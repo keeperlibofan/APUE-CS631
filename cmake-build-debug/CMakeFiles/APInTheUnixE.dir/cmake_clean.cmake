@@ -1,5 +1,6 @@
 file(REMOVE_RECURSE
   "CMakeFiles/APInTheUnixE.dir/main.c.o"
+  "CMakeFiles/APInTheUnixE.dir/echoall.c.o"
   "APInTheUnixE.pdb"
   "APInTheUnixE"
 )
