@@ -35,5 +35,7 @@ signal_intr(int signo, Sigfunc * func) {
 }
 
 int main() {
-    sigprocmask();
+    sigprocmask(SIG_UNBLOCK, );
+
+
 }
